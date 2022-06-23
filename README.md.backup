@@ -1,6 +1,6 @@
 ## Setting up Xi1.x online search system
 
-This is the documentation for setting up online searching, result databases and the rest with Xi1.
+This is the documentation for setting up online searching WITHIN A LOCAL NETWORK, result databases and the rest with Xi1.
 
 
 You need 4 machines, or VMs.
@@ -83,6 +83,30 @@ to enable the module.
 Once you configured the database client (steps above), you should be able to connect to the database server by:
 
     psql -h db xi3 bio_user
+
+using the password you changed in the Database server configuration.
+
+
+In the /var/www/html/ directory, you need to pull the xiview container.git 
+
+for xiview PUBLIC:
+
+    cd /var/www/html/
+    git clone --recurse-submodules https://github.com/Rappsilber-Laboratory/xiView_container.git 
+
+
+For rappsilber INTERNAL, clone the internal branch:
+
+    git clone -b lab_internal --recurse-submodules https://github.com/Rappsilber-Laboratory/xiView_container.git 
+    
+You will then need to edit ownership and permissions to the cloned repository so that it www-data group.
+
+    chgrp www-data -R xiView_container  
+
+and edit read/write permissions as needed.
+
+You then need to change the file connectionString.php.default to look for the database server and move it to a safe place (away from the directory of the repository! This can be a security risk that exposes your database/password). Put in the ip address of the host, xi3 as the database name, bio_user as the user and the password you chose in database configuration.
+
 
 ### configuration of the storage server
 Install samba 
