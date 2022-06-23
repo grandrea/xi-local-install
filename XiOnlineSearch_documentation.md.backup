@@ -1,0 +1,36 @@
+## Setting up Xi1.x online search system
+
+
+You need 4 machines, or VMs.
+
+1. Apache PHP webserver ("webserver")
+2. Storage server
+3. Database server
+4. Computational server/compute machine
+
+All of them can be linux boxes. This configuration is done with Ubuntu 20.04.
+
+### configuration of the webserver
+You need apache (2.4.38 or later) , PHP (7.3 or later)
+
+    sudo apt-get install apache2 php
+
+### configuration of the storage server
+
+
+
+### configuration of the database server
+You need postGreS (9.6 or later, we also tested with 11)
+
+    sudo apt-get install postgresql postgresl-contrib postgresql-client
+
+
+
+For the database, you also need the definition of crosslinkers and modifications. You can download a version of our crosslinker database here 
+
+
+### configuration of the computational server
+
+You need Java (8 or later. Versions 12 or above have been seen )
+
+    sudo apt-get install default-jre default-jdk
