@@ -99,9 +99,9 @@ for xiview PUBLIC:
     git clone --recurse-submodules https://github.com/Rappsilber-Laboratory/xiView_container.git 
 
 
-For rappsilber INTERNAL, clone the internal branch:
+For rappsilber INTERNAL (virtual machine version), clone the internal branch:
 
-    git clone -b lab_internal --recurse-submodules https://github.com/Rappsilber-Laboratory/xiView_container.git 
+    git clone -b VM --recurse-submodules https://github.com/Rappsilber-Laboratory/xiView_container.git 
 
 make double sure to pull all remote submodules
 
@@ -109,7 +109,7 @@ make double sure to pull all remote submodules
 
 You will then need to edit ownership and permissions to the cloned repository so that it www-data group.
 
-    chgrp www-data -R xiView_container  
+    chgrp www-data -R xiView_container
 
 and edit read/write permissions as needed.
 
@@ -190,7 +190,7 @@ That 1 in values should be the user_id number from the 	select * from user_group
 
 You can now login to your user and try to submit a search!
 
-#### fixing xi to work with an empty database (not needed if on latest branch)
+#### fixing xi to work with an empty database (not needed if on latest VM branch)
 
 online Xi was not configured to run on an empty database. But this is an easy fix. Go to searchSubmit module/js.
 
@@ -216,10 +216,17 @@ and the same for the block on the "acquistions" (yes, it is misspelled in the or
 ### configuration of the storage server
 Install samba 
 
+	sudo apt-get install samba
 
-create a share
+Create a folder for storage for all the xi data. Remeber it will get HUUUGE.
 
+	mkdir storage
 
+create a share in samba
+
+	sudo /etc/samba/smb.conf
+
+and add the section from example_smb.conf at the bottom of the file, editing the path and if needed last 2 lines for users with access (by default is a group called rsmbusers that will need to be created)
 
  
 ### configuration of the computational server
