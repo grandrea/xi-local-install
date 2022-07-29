@@ -26,7 +26,11 @@ In the folder with the sql files, become the postgres user:
 
     sudo su postgres
 
-then edit xidb_schema to change the password to something you like and create the database:
+then edit xidb_schema to change the password to something you like.
+
+	vim xidb_schema.sql
+
+and create the database:
 
     cat xidb_schema.sql | psql
 This creates a datatabase called xi3.
@@ -111,11 +115,18 @@ and edit read/write permissions as needed.
 
 You then need to change the file connectionString.php.default to look for the database server (via IP or domain name) and move it to a safe place (away from the directory of the repository! This can be a security risk that exposes your database/password). Copy this file to connectionString.php and edit. Put in the ip address of the host, xi3 as the database name, bio_user as the user and the password you chose in database configuration. 
 
+
 You can then open your browser and go to localhost/xiView_container/userGUI/userLogin.html and see the login page.
 
 #### create the first account
 
-Work to do in UserGUI module:
+Work to do in UserGUI module
+
+Fix the error reporting in the file in php/registerNewUser.php by adding
+
+	require_once('../../vendor/php/PHPMailer-master/scr/Exception.php');
+	
+wherever you see require_once SMTP and PHPMailer statements.
 
 Modify the regex rules in userGui/json/config.json. Edit the horrendous regex for email parsing to 
 
@@ -138,18 +149,69 @@ remove line 52-53 from userReg.html to eliminate
 
 and the related error message.
 
-In the php folder of userGui, change registerNewUser.html. Comment out (with the character "//" because comment in php is not #) line 12 and line 18 to disable the captcha.
+In the php folder of userGui, change registerNewUser.php. Comment out (with the character "//" because comment in php is not #) line 12 and line 18 to disable the captcha.
 
-copy xi_ini from the main folder to the directory above. You will need admin rights.
+In userReg.html, similarly dete lines 73,110 to disable captcha.
+
+Copy xi_ini from the main folder to the directory above. You will need admin rights.
 
 	cp -rv xi_ini ../
 
 then edit emailInfo.php to have the email of the first user and it has to have a real host:
 
-	"account"= "andrea.graziadei@tu-berlin.de"  
-	"password" = "MYPASSWORD"
-	"host" = "exchange.tu-berlin.de"
-Now go to the user login page in your browser localhost/xiView_container/userGUI/php/registerNewUser.php .
+	"account"= "andrea.graziadei@tu-berlin.de",  
+	"password" = "MYPASSWORD",
+	"host" = "exchange.tu-berlin.de",
+
+and 
+
+	$urlRoot="http://192.168.0.6/xiView_container";
+	
+
+ Now go to the user login page in your browser localhost/xiView_container/userGUI/php/registerNewUser.php. Create the user. You should receive an email.
+ 
+ Now you need to activate this user in the database, so go back to the DATABASE SERVER.
+
+In the database (become postgres user, type psql etc)
+
+	update user_in_group set group_id=1;
+
+to enable login. Then check the number of the user id:
+
+	select * from user_groups;
+
+Then make the user an admin:
+
+
+	insert INTO user_in_group (user_id,group_id) values (1,5);
+
+That 1 in values should be the user_id number from the 	select * from user_groups; command. If you retype that command now you should see the user belonging to "internal" (group 1) and "admin" (group 5).
+
+
+You can now login to your user and try to submit a search!
+
+#### fixing xi to work with an empty database (not needed if on latest branch)
+
+online Xi was not configured to run on an empty database. But this is an easy fix. Go to searchSubmit module/js.
+
+edit the function mergeInFilenamesToAcquisitions at line 371.
+
+before runNames.foreach add
+
+	if (runNames) {
+
+and a
+ 
+	}
+after the ; that closes the runNames block.
+
+and the same for the block on the "acquistions" (yes, it is misspelled in the original) block.
+
+	if (acquistions) {
+	
+	...
+	});}
+
 
 ### configuration of the storage server
 Install samba 
