@@ -66,7 +66,7 @@ Enable listening by editing /etc/postgresql/VERSION_NUMBER/main/postgresql.conf 
 ### configuration of the storage server
 Install samba 
 
-	sudo apt-get install samba
+	sudo apt-get install samba openssh-server
 
 Create a folder for storage for all the xi data. Remeber it will get HUUUGE.
 
@@ -247,7 +247,7 @@ define the storage server in /etc/hosts by adding the line with its ip e.g.
 
 	192.168.0.7     storage
 
-Add the following line to /etc/fstab on the webserver.
+Add the line from credentials.txt to /etc/fstab on the webserver, changing user and password to match the user on the storage server that has access to the xiStorage share and the rsmbusers group.
 
  
  
