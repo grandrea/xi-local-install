@@ -135,14 +135,14 @@ peak_id	1
 --
 
 COPY user_groups (id, name, max_search_count, max_spectra, max_aas, search_lifetime_days, super_user, see_all, can_add_search, max_searches_per_day) FROM stdin;                                                                             
-14      past_student    100     10000000        100000  1000    f       f       f       0
-13      reader  0       100000000       100000  10000   f       t       f       0
-6       past_member     10000   100000000       1000000 10000   f       f       f       0
-2       student 100     1000000000      100000  10000   f       f       t       10
-12      awaiting_approval       0       100000  2000    366     f       f       f       0
-5       administrator   10000   1000000000      2000000 10000   t       t       t       100
-11      external_member 1000    1000000000      2000000 366     f       f       t       10
-1       internal        200000  2000000000      40000000        10000   f       t       t       100
+14	past_student	100	10000000	100000	1000	f	f	f	0
+13	reader	0	100000000	100000	10000	f	t	f	0
+6	past_member	10000	100000000	1000000	10000	f	f	f	0
+2	student	100	1000000000	100000	10000	f	f	t	10
+12	awaiting_approval	0	100000	2000	366	f	f	f	0
+5	administrator	10000	1000000000	2000000	10000	t	t	t	100
+11	external_member	1000	1000000000	2000000	366	f	f	t	10
+1	internal	200000	2000000000	40000000	10000	f	t	t	100
 \.
 
 
