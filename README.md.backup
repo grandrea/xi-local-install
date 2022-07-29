@@ -226,7 +226,7 @@ create a share in samba
 
 	sudo /etc/samba/smb.conf
 
-and add the section from example_smb.conf at the bottom of the file, editing the path
+and add the section from example_smb.conf at the bottom of the file, editing the path and if needed last 2 lines for users with access (by default is a group called rsmbusers that will need to be created)
 
  
 ### configuration of the computational server
