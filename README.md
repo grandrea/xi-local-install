@@ -98,15 +98,60 @@ for xiview PUBLIC:
 For rappsilber INTERNAL, clone the internal branch:
 
     git clone -b lab_internal --recurse-submodules https://github.com/Rappsilber-Laboratory/xiView_container.git 
-    
+
+make double sure to pull all remote submodules
+
+	git submodule update --init --remote --recursive
+
 You will then need to edit ownership and permissions to the cloned repository so that it www-data group.
 
     chgrp www-data -R xiView_container  
 
 and edit read/write permissions as needed.
 
-You then need to change the file connectionString.php.default to look for the database server and move it to a safe place (away from the directory of the repository! This can be a security risk that exposes your database/password). Copy this file to connectionString.php and edit. Put in the ip address of the host, xi3 as the database name, bio_user as the user and the password you chose in database configuration. 
+You then need to change the file connectionString.php.default to look for the database server (via IP or domain name) and move it to a safe place (away from the directory of the repository! This can be a security risk that exposes your database/password). Copy this file to connectionString.php and edit. Put in the ip address of the host, xi3 as the database name, bio_user as the user and the password you chose in database configuration. 
 
+You can then open your browser and go to localhost/xiView_container/userGUI/userLogin.html and see the login page.
+
+#### create the first account
+
+Work to do in UserGUI module:
+
+Modify the regex rules in userGui/json/config.json. Edit the horrendous regex for email parsing to 
+
+	"/*@.*/"
+
+and edit the line 
+
+	<input type="email"......>
+
+in userReg.html and change the pattern to
+
+	pattern=".*"
+
+
+Then begin removing the captcha from the user login page.
+
+remove line 52-53 from userReg.html to eliminate
+
+	<div id="recaptchaWidget.....>
+
+and the related error message.
+
+In the php folder of userGui, change registerNewUser.html. Comment out (with the character "//" because comment in php is not #) line 12 and line 18 to disable the captcha.
+
+copy xi_ini from the main folder to the directory above. You will need admin rights.
+
+	cp -rv xi_ini ../
+
+then edit emailInfo.php to have the email of the first user and it has to have a real host:
+
+	"account"= "andrea.graziadei@tu-berlin.de"  
+	"password" = "MYPASSWORD"
+	"host" = "exchange.tu-berlin.de"
+	
+	and edit 
+Now go to the user login page in your browser localhost/xiView_container/userGUI/php/registerNewUser.php.
 
 ### configuration of the storage server
 Install samba 
