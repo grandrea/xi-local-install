@@ -13,10 +13,43 @@ You need 4 machines, or VMs.
 
 All of them can be linux boxes. This configuration is done with Linux mint 20.03.
 
+### configuration of the storage server
+Install samba 
+
+	sudo apt-get install samba openssh-server
+
+Create a folder for storage for all the xi data. Remeber it will get HUUUGE.
+
+	mkdir storage
+
+create a share in samba
+
+	sudo /etc/samba/smb.conf
+
+and add the section from example_smb.conf at the bottom of the file, editing the path and if you want change the name last 2 lines for users with access (by default is a group called rsmbusers that will need to be created).
+
+Create the user group in called "rsmbusers" like in the example smb.conf.
+
+	sudo addgroup rsmbusers
+
+and take note of the group id output (in my case 1001).
+
+Add the primary user on this compurter to this group
+
+	sudo usermod -a -G rsmbusers andrea
+
+
+and restart samba
+
+
+	sudo systemctl restart smb.service
+
+
+
 ### configuration of the database server
 You need postGreSql (9.6 or later, we also tested with 12)
 
-    sudo apt-get install postgresql postgresl-contrib postgresql-client
+    sudo apt-get install postgresql postgresl-contrib postgresql-client sshfs openssh-server
 
 
 
@@ -63,32 +96,13 @@ Enable listening by editing /etc/postgresql/VERSION_NUMBER/main/postgresql.conf 
     sudo systemctl restart postgresql
 
 
-### configuration of the storage server
-Install samba 
+#### add the storage server to the paths in the database
 
-	sudo apt-get install samba openssh-server
+	psql xi3
 
-Create a folder for storage for all the xi data. Remeber it will get HUUUGE.
+then update as follows to match what is done in the mounting of storage server at the end of configuration of webserver
 
-	mkdir storage
-
-create a share in samba
-
-	sudo /etc/samba/smb.conf
-
-and add the section from example_smb.conf at the bottom of the file, editing the path and if you want change the name last 2 lines for users with access (by default is a group called rsmbusers that will need to be created).
-
-Create the user group in called "rsmbusers" like in the example smb.conf.
-
-	sudo addgroup rsmbusers
-
-and take note of the group id output (in my case 1001).
-
-Add the primary user on this compurter to this group
-
-	sudo usermod -a -G rsmbusers andrea
-
-
+	update base_setting set setting='/mnt/xiStorage' where id=1;
 
 
 ### configuration of the webserver
@@ -248,6 +262,10 @@ define the storage server in /etc/hosts by adding the line with its ip e.g.
 	192.168.0.7     storage
 
 Add the line from credentials.txt to /etc/fstab on the webserver, changing user and password to match the user on the storage server that has access to the xiStorage share and the rsmbusers group.
+
+Then create the xiStorage directory for the mount
+
+	sudo mkdir /mnt/xiStorage
 
  
  
