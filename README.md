@@ -63,6 +63,33 @@ Enable listening by editing /etc/postgresql/VERSION_NUMBER/main/postgresql.conf 
     sudo systemctl restart postgresql
 
 
+### configuration of the storage server
+Install samba 
+
+	sudo apt-get install samba
+
+Create a folder for storage for all the xi data. Remeber it will get HUUUGE.
+
+	mkdir storage
+
+create a share in samba
+
+	sudo /etc/samba/smb.conf
+
+and add the section from example_smb.conf at the bottom of the file, editing the path and if you want change the name last 2 lines for users with access (by default is a group called rsmbusers that will need to be created).
+
+Create the user group in called "rsmbusers" like in the example smb.conf.
+
+	sudo addgroup rsmbusers
+
+and take note of the group id output (in my case 1001).
+
+Add the primary user on this compurter to this group
+
+	sudo usermod -a -G rsmbusers andrea
+
+
+
 
 ### configuration of the webserver
 You need apache (2.4.38 or later) , PHP (7.3 or later) and the php-pgsql module
@@ -212,22 +239,17 @@ and the same for the block on the "acquistions" (yes, it is misspelled in the or
 	...
 	});}
 
+This should enable you to open the "new search" page in the history page.
 
-### configuration of the storage server
-Install samba 
+#### mount the storage server samba share
 
-	sudo apt-get install samba
+define the storage server in /etc/hosts by adding the line with its ip e.g.
 
-Create a folder for storage for all the xi data. Remeber it will get HUUUGE.
+	192.168.0.7     storage
 
-	mkdir storage
+Add the following line to /etc/fstab on the webserver.
 
-create a share in samba
-
-	sudo /etc/samba/smb.conf
-
-and add the section from example_smb.conf at the bottom of the file, editing the path and if needed last 2 lines for users with access (by default is a group called rsmbusers that will need to be created)
-
+ 
  
 ### configuration of the computational server
 
