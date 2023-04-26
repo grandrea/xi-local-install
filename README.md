@@ -102,7 +102,7 @@ Enable listening by editing /etc/postgresql/VERSION_NUMBER/main/postgresql.conf 
 
 then update as follows to match what is done in the mounting of storage server at the end of configuration of webserver
 
-	update base_setting set setting='/mnt/xiStorage' where id=1;
+	update base_setting set setting='/mnt/xiStorage/' where id=1;
 
 
 ### configuration of the webserver
