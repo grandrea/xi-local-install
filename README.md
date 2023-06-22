@@ -274,3 +274,23 @@ Then create the xiStorage directory for the mount
 You need Java (8 or later. Versions 12 or above have been seen to cause problems, albeit this is just for xiFDR, xiSEARCH should still work)
 
     sudo apt-get install default-jre default-jdk
+
+#### configuration of xiLAUNCHER
+Download xiLAUNCHER from https://github.com/Rappsilber-Laboratory/XiLauncher
+
+Create a config file as described in https://github.com/Rappsilber-Laboratory/XiLauncher/tree/master/doc
+
+Download xiSEARCH jar. The version may need to be inserted into the database manually using e.g. pgadmin.
+
+Launcher can be started manually or as a service (described in the doc of the launcher).
+
+#### configuration of annotator
+In xiView_container folder, use start_annotator.sh but configure DBASE_URI to your address.
+Configure window.xiAnnotRoot in xiSpecConfig.php accordingly (same address as DBASE_URI).
+
+### other notes
+The VM branch of xiVIEW only works with an older php version - the internal version has the needed fixes.
+
+Some jars are incompatible with newer jdbc drivers and will give authentication errors. You can download the newer driver from https://jdbc.postgresql.org/download/postgresql-42.6.0.jar and call the jar file with:
+     
+    java -cp "postgresql-42.6.0.jar:xiAnnotator-1.4.28-jar-with-dependencies.jar" -DBASE_URI=https://SERVER:8083/xiAnnotator/ org.rappsilber.Main
